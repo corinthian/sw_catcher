@@ -1,0 +1,39 @@
+watch_dir = "/Users/rlarsen/Documents/superwhisper/recordings"
+# log_file = "~/Library/Logs/sw-catcher/sw-catcher.log"  # Uncomment to override default
+log_level = "debug"                                       # error, warn, info, debug, trace
+echo_to_stdout = true
+detect_keyphrases = true                                 # enable keyphrase detection
+# disable_logs = false                                   # Set to true to disable logging completely
+result_field_preference = "raw"                         # llm, raw, intermediate, auto (default)
+disable_clipboard = true  # Set to true to stop sending text to clipboard
+
+[keyphrases]
+"open bbedit" = "BBEdit"               # open macOS Notes app
+"open obsidian" = "Obsidian"               # open macOS Notes app
+"remind me later" = ""                     # empty action (just detection)
+"open iTerm" = "iTerm"
+"open safari" = "Safari"
+"open solver" = "Soulver 3"
+"open soulver" = "Soulver 3"
+"open Messages" = "Messages"
+"open Discord" = "Discord"
+
+# Web Services and Search Integration
+"search google" = "https://www.google.com/search?q="
+"search wikipedia" = "https://en.wikipedia.org/wiki/Special:Search?search="
+"search youtube" = "https://www.youtube.com/results?search_query="
+"translate" = "https://translate.google.com/?sl=auto&tl=en&text="
+
+# KBM URLs
+"paste that" = "kmtrigger://macro=paste%20that"
+"send that" = "kmtrigger://macro=send%20that"
+
+[keyphrase_settings]
+matching_strategy = "simple"     # simple, wholeword, exact
+punctuation_handling = "all"   # ignore, sentence, all
+
+[text_cleaning]
+trim_whitespace = true
+normalize_newlines = true
+remove_extra_spaces = true
+capitalize_sentences = false

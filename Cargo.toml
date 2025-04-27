@@ -1,0 +1,47 @@
+[package]
+name = "sw-catcher"
+version = "0.2.0"
+authors = ["Your Name <your.email@example.com>"]
+edition = "2021"
+description = "Monitors a directory for meta.json files and copies LLM results to clipboard"
+repository = "https://github.com/yourusername/sw-catcher"
+license = "MIT"
+readme = "README.md"
+keywords = ["clipboard", "llm", "utility", "automation"]
+categories = ["command-line-utilities"]
+
+[lib]
+name = "sw_catcher"
+path = "src/lib.rs"
+
+[[bin]]
+name = "sw-catcher"
+path = "src/main.rs"
+
+[dependencies]
+clap = { version = "4.4", features = ["derive"] }
+copypasta = "0.10"
+dirs = "5.0"  # Added for getting platform-specific directories
+log = "0.4"
+notify = "6.1"
+notify-rust = "4.9"
+regex = "1.10"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+simplelog = "0.12"
+toml = "0.8"
+open = "5.0"
+
+[dev-dependencies]
+tempfile = "3.8"
+test-log = "0.2"
+
+[profile.release]
+lto = true
+codegen-units = 1
+opt-level = 3
+strip = true
+
+[features]
+default = []
+# Enable advanced clipboard features (currently a placeholder)
