@@ -43,8 +43,6 @@ pub struct AppConfig {
     pub echo_to_stdout: Option<bool>,
     pub detect_keyphrases: Option<bool>,
     pub keyphrases: Option<HashMap<String, String>>,
-    #[serde(default)]
-    pub disable_notifications: Option<bool>,
     pub dry_run: Option<bool>,
     pub disable_logs: Option<bool>,
     pub disable_clipboard: Option<bool>,
@@ -74,10 +72,6 @@ pub struct Opts {
     #[arg(short = 'e', long)]
     pub echo_to_stdout: bool,
 
-    /// Disable desktop notifications
-    #[arg(short = 'n', long)]
-    pub disable_notifications: bool,
-
     /// Run in dry-run mode (don't execute actions)
     #[arg(short = 'd', long)]
     pub dry_run: bool,
@@ -101,7 +95,6 @@ pub struct AppState {
     pub config: AppConfig,
     pub clipboard_format: ClipboardFormat,
     pub dry_run: bool,
-    pub disable_notifications: bool,
     pub disable_logs: bool,
 }
 
@@ -122,7 +115,6 @@ pub fn create_default_config_file(path: &str) -> std::io::Result<()> {
 log_level = "info"                # error, warn, info, debug, trace
 echo_to_stdout = true
 detect_keyphrases = true          # enable keyphrase detection
-# disable_notifications = false
 # dry_run = false
 # disable_logs = false            # Disable logging completely
 clipboard_format = "plaintext"    # plaintext, richtext, markdown
@@ -182,7 +174,6 @@ pub fn load_config() -> NotifyResult<AppState> {
             echo_to_stdout: None,
             detect_keyphrases: Some(true), // Enable keyphrases by default
             keyphrases: Some(keyphrases),  // Add default keyphrases
-            disable_notifications: None,
             dry_run: None,
             clipboard_format: None,
             result_field_preference: None,
@@ -194,8 +185,6 @@ pub fn load_config() -> NotifyResult<AppState> {
     };
 
     // Set up app state by combining file config and command line options
-    let disable_notifications =
-        opts.disable_notifications || file_config.disable_notifications.unwrap_or(false);
     let dry_run = opts.dry_run || file_config.dry_run.unwrap_or(false);
     let disable_logs = opts.disable_logs || file_config.disable_logs.unwrap_or(false);
     let clipboard_format = parse_clipboard_format(
@@ -255,7 +244,6 @@ pub fn load_config() -> NotifyResult<AppState> {
         config,
         clipboard_format,
         dry_run,
-        disable_notifications,
         disable_logs,
     })
 }
@@ -379,7 +367,6 @@ pub fn print_usage_guide() {
     eprintln!("     log_level = \"info\"  # error, warn, info, debug, trace");
     eprintln!("     echo_to_stdout = true");
     eprintln!("     detect_keyphrases = true");
-    eprintln!("     disable_notifications = false");
     eprintln!("     dry_run = false");
     eprintln!("     disable_logs = false  # Disable logging completely");
     eprintln!("     clipboard_format = \"plaintext\"  # plaintext, richtext, markdown");

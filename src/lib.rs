@@ -11,8 +11,7 @@
 //! - Detects keyphrases and executes associated actions
 //! - Supports chained actions through natural dictation
 //! - Configurable text cleaning options
-//! - Supports desktop notifications
-//! - Dry-run mode for testing actions
+//! - Supports dry-run mode for testing actions
 //!
 //! ## Example
 //!

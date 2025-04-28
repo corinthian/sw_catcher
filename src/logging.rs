@@ -128,10 +128,6 @@ pub fn log_startup_info(app_state: &AppState) {
     if app_state.dry_run {
         debug!("Running in DRY-RUN mode - actions will be logged but not executed");
     }
-
-    if app_state.disable_notifications {
-        debug!("Desktop notifications are disabled");
-    }
     
     if app_state.disable_logs {
         debug!("Logging to file is disabled");

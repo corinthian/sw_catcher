@@ -4,8 +4,7 @@ use crate::config::AppState;
 use crate::extract_text_by_preference;
 use crate::keyphrase::{process_keyphrases_enhanced, KeyphraseAction, KeyphraseProcessingOptions};
 use crate::text_processing::apply_text_cleaning;
-use log::{debug, error, info, warn};
-use notify_rust::Notification;
+use log::{debug, error, info};
 use serde_json::Value;
 use std::path::{Path, PathBuf};
 use std::sync::{Arc, Mutex};
@@ -97,13 +96,6 @@ pub fn process_meta_file(
                     match ensure_clipboard_content_with_monitoring(&final_text, &app_state.clipboard_format) {
                         Ok(_) => {
                             info!("Copied to clipboard: {}", truncate(&final_text, 60));
-
-                            // Send notification if not disabled
-                            if !app_state.disable_notifications {
-                                if let Err(e) = notify_user(&final_text) {
-                                    warn!("Failed to send notification: {}", e);
-                                }
-                            }
                         }
                         Err(e) => error!("Clipboard error: {}", e),
                     }
@@ -133,18 +125,6 @@ pub fn process_meta_file(
             }
         }
     }
-}
-
-/// Display a notification to the user about copied text
-pub fn notify_user(text: &str) -> Result<(), Box<dyn std::error::Error>> {
-    let preview = truncate(text, 50);
-    Notification::new()
-        .summary("Text Copied")
-        .body(&format!("Copied to clipboard: {}", preview))
-        .icon("clipboard")
-        .timeout(5000) // 5 seconds
-        .show()?;
-    Ok(())
 }
 
 /// Log details about an unknown JSON structure

@@ -24,7 +24,6 @@ copypasta = "0.10"
 dirs = "5.0"  # Added for getting platform-specific directories
 log = "0.4"
 notify = "6.1"
-notify-rust = "4.9"
 regex = "1.10"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
