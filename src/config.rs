@@ -50,6 +50,7 @@ pub struct AppConfig {
     pub result_field_preference: Option<String>, // "llm", "raw", "intermediate", or "auto"
     pub text_cleaning: Option<TextCleaningOptions>,
     pub keyphrase_settings: Option<KeyphraseConfig>,
+    pub mode_name: Option<String>, // Filter processing by mode name
 }
 
 /// sw-catcher: Monitors a directory for meta.json files and copies LLM results to clipboard
@@ -119,7 +120,8 @@ detect_keyphrases = true          # enable keyphrase detection
 # disable_logs = false            # Disable logging completely
 clipboard_format = "plaintext"    # plaintext, richtext, markdown
 result_field_preference = "auto"  # llm, raw, intermediate, auto
-# disable_clipboard = false         # Disable copying to clipboard
+# disable_clipboard = false       # Disable copying to clipboard
+# mode_name = "Literal"           # Optional: Filter processing by mode name
 
 [keyphrases]
 # Application examples
@@ -181,6 +183,7 @@ pub fn load_config() -> NotifyResult<AppState> {
             disable_logs: None,
             disable_clipboard: None,
             keyphrase_settings: None,
+            mode_name: None,  // No default mode filter
         }
     };
 
@@ -371,6 +374,7 @@ pub fn print_usage_guide() {
     eprintln!("     disable_logs = false  # Disable logging completely");
     eprintln!("     clipboard_format = \"plaintext\"  # plaintext, richtext, markdown");
     eprintln!("     result_field_preference = \"auto\"  # llm, raw, intermediate, auto");
+    eprintln!("     mode_name = \"Literal\"  # Optional: Filter processing by mode name");
     eprintln!("     [keyphrases]");
     eprintln!("     # Keyphrase examples:");
     eprintln!("     \"open browser\" = \"https://www.example.com\"");

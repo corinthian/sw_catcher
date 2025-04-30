@@ -52,6 +52,8 @@ mod meta {
         pub result: Option<String>,
         #[serde(rename = "rawResult", default)]
         pub raw_result: Option<String>,
+        #[serde(rename = "modeName", default)]
+        pub mode_name: Option<String>,
     }
 }
 
@@ -115,6 +117,7 @@ mod tests {
             llm_result: Some("This is the LLM result".to_string()),
             result: Some("This is the intermediate result".to_string()),
             raw_result: Some("This is the raw result".to_string()),
+            mode_name: Some("Literal".to_string()),
         };
 
         // Test each preference
@@ -129,6 +132,7 @@ mod tests {
             llm_result: None,
             result: Some("This is the intermediate result".to_string()),
             raw_result: Some("This is the raw result".to_string()),
+            mode_name: Some("Literal".to_string()),
         };
 
         assert_eq!(extract_text_by_preference(&meta_partial, "llm"), None);
@@ -138,6 +142,7 @@ mod tests {
             llm_result: None,
             result: None,
             raw_result: Some("This is the raw result".to_string()),
+            mode_name: None,
         };
 
         assert_eq!(extract_text_by_preference(&meta_minimal, "auto"), Some("This is the raw result".to_string()));

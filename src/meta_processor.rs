@@ -61,6 +61,35 @@ pub fn process_meta_file(
         // Parse the JSON
         match serde_json::from_str::<crate::Meta>(&txt) {
             Ok(meta) => {
+                // Check if a mode name filter is configured and if it matches
+                if let Some(filter_mode) = &app_state.config.mode_name {
+                    // Skip processing if mode name doesn't match
+                    if let Some(meta_mode) = &meta.mode_name {
+                        if meta_mode != filter_mode {
+                            debug!(
+                                "Skipping meta.json with mode '{}' (filter: '{}')",
+                                meta_mode, filter_mode
+                            );
+                            if attempt < max_retries {
+                                debug!("Retrying in {:?}...", retry_delay);
+                                sleep(retry_delay);
+                                continue;
+                            }
+                            return;
+                        }
+                        // Mode matches, proceed with processing
+                        debug!("Processing meta.json with matching mode: '{}'", filter_mode);
+                    } else {
+                        debug!("Skipping meta.json with no mode name (filter: '{}')", filter_mode);
+                        if attempt < max_retries {
+                            debug!("Retrying in {:?}...", retry_delay);
+                            sleep(retry_delay);
+                            continue;
+                        }
+                        return;
+                    }
+                }
+                
                 // Get the preference from config
                 let preference = app_state.config.result_field_preference.as_deref().unwrap_or("auto");
                 
@@ -92,12 +121,18 @@ pub fn process_meta_file(
                     // Apply text cleaning if configured
                     let final_text = apply_text_cleaning(&cleaned_text, &app_state.config);
 
-                    // Copy to clipboard with monitoring for changes
-                    match ensure_clipboard_content_with_monitoring(&final_text, &app_state.clipboard_format) {
-                        Ok(_) => {
-                            info!("Copied to clipboard: {}", truncate(&final_text, 60));
+                    // Check if clipboard operations are disabled
+                    if !app_state.config.disable_clipboard.unwrap_or(false) {
+                        // Copy to clipboard with monitoring for changes
+                        match ensure_clipboard_content_with_monitoring(&final_text, &app_state.clipboard_format) {
+                            Ok(_) => {
+                                info!("Copied to clipboard: {}", truncate(&final_text, 60));
+                            }
+                            Err(e) => error!("Clipboard error: {}", e),
                         }
-                        Err(e) => error!("Clipboard error: {}", e),
+                    } else {
+                        // Log that clipboard operations are skipped
+                        info!("Clipboard operations disabled, not copying to clipboard: {}", truncate(&final_text, 60));
                     }
                     return; // Success! Exit function
                 } else {
