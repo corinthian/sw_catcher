@@ -98,11 +98,11 @@ pub fn normalize_newlines(text: &str) -> String {
 /// Process text segments, handling each one appropriately
 pub fn process_text_segments(segments: &[crate::keyphrase::TextSegment]) -> String {
     let mut result = String::new();
-    
+
     for segment in segments {
         result.push_str(&segment.text);
     }
-    
+
     // Normalize whitespace in the result
     normalize_whitespace(&result)
 }
@@ -138,6 +138,7 @@ mod tests {
     }
 
     #[test]
+    #[test]
     fn test_apply_text_cleaning() {
         // Create test config with all options enabled
         let options = TextCleaningOptions {
@@ -154,12 +155,14 @@ mod tests {
             echo_to_stdout: None,
             detect_keyphrases: None,
             keyphrases: None,
-            disable_notifications: None,
             dry_run: None,
             clipboard_format: None,
             text_cleaning: Some(options),
             disable_logs: None,
             keyphrase_settings: None,
+            disable_clipboard: None,
+            mode_name: None,
+            result_field_preference: None,
         };
 
         let input = "  hello  world.\r\n  this is a test.  ";
@@ -167,11 +170,11 @@ mod tests {
 
         assert_eq!(apply_text_cleaning(input, &config), expected);
     }
-    
+
     #[test]
     fn test_process_text_segments() {
         use crate::keyphrase::TextSegment;
-        
+
         let segments = vec![
             TextSegment {
                 text: "Hello ".to_string(),
@@ -184,7 +187,7 @@ mod tests {
                 precedes_keyphrase: None,
             },
         ];
-        
+
         assert_eq!(process_text_segments(&segments), "Hello my notes are here.");
     }
 }

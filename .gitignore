@@ -1,5 +1,4 @@
-/target
-Cargo.lock
+target
 bootstrap.sh
 sw-catcher.log
 .DS_Store
