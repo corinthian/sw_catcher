@@ -25,8 +25,11 @@ pub fn start_watcher(app_state: AppState) -> NotifyResult<()> {
     };
 
     info!("Watching for meta.json in {:?}", watch_path);
-    info!("Any LLM results will be copied to your clipboard");
-
+	if !app_state.config.disable_clipboard.unwrap_or(false) {
+		info!("Any LLM results will be copied to your clipboard");
+	} else {
+		info!("Clipboard operations disabled, LLM results will be processed but not copied to clipboard");
+	}
     // Display result field preference
     if let Some(pref) = &app_state.config.result_field_preference {
         info!("Using result field preference: {}", pref);
